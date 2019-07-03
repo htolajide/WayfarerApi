@@ -1,3 +1,2 @@
-# wayfarer
-Andela Developer Challenge 
+# wayfarer 
 WayFarer is a public bus transportation booking server.
