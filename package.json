@@ -1,7 +1,7 @@
 {
-  "name": "invana",
+  "name": "WayfareApi",
   "version": "1.0.0",
-  "description": "A demonstration of RESTful API design",
+  "description": "A transport booking app back-end API development",
   "main": "app.js",
   "scripts": {
     "build": "babel src --out-dir dist --copy-files",
@@ -10,7 +10,7 @@
     "start": "node dist/app.js",
     "start:dev": "nodemon --exec babel-node src/app.js"
   },
-  "author": "Enejo James Oche",
+  "author": "Hammed Taofeek",
   "license": "ISC",
   "dependencies": {
     "@babel/polyfill": "^7.4.4",
