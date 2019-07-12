@@ -8,7 +8,6 @@ import morgan from 'morgan';
 
 import v1Router from './routes';
 
-
 dotenv.config();
 
 const app = express();
@@ -18,7 +17,6 @@ app.use(bodyParser.json());
 app.use(cookieParser());
 app.use(morgan('combined'));
 app.use(jsend.middleware);
-
 
 app.use('/api/v1', v1Router);
 
