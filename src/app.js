@@ -8,6 +8,7 @@ import morgan from 'morgan';
 
 import v1Router from './routes';
 
+
 dotenv.config();
 
 const app = express();
@@ -18,9 +19,10 @@ app.use(cookieParser());
 app.use(morgan('combined'));
 app.use(jsend.middleware);
 
+
 app.use('/api/v1', v1Router);
 
-app.get('*', (req, res) => res.jsend.success('Invana!!!'));
+app.get('*', (req, res) => res.jsend.success('WayFarerApi'));
 
 const port = parseInt(process.env.PORT, 10) || 4000;
 

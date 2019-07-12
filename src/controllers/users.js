@@ -25,13 +25,18 @@ export default {
 
     // persist user to database
     Users.create(user);
-
+  
     // sign jwt and wrap in a cookie
     const token = jwt.sign({ userId: user.id }, process.env.SECRET);
     res.cookie('token', token, { expires: new Date(Date.now() + 3600000), httpOnly: true });
 
     return res.jsend.success(token);
   },
+
+  //get all users
+
+  seeUser: (req, res) => {return res.jsend.success(Users);},
+  
   login: async (req, res) => {
     const { email, password } = req.body;
 

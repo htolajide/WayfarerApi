@@ -5,13 +5,15 @@ import authenticator from '../middlewares/authenticator';
 import users from '../controllers/users';
 import inventory from '../controllers/inventory';
 
+
+
 const router = express.Router();
 
 // auth
 router.post('/signup', validator.auth, users.signup);
 router.post('/login', validator.auth, users.login);
-
-// inventory
+// users
+router.get('/users',  users.seeUser);
 // Create inventory
 router.post('/inventory', authenticator, validator.inventory, inventory.create);
 
