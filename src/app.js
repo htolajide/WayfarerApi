@@ -1,3 +1,4 @@
+//to setup eslint airbnb use npm i -D eslint eslint-config-airbnb-base eslint-plugin-import
 import '@babel/polyfill';
 import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
