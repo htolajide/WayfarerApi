@@ -6,11 +6,11 @@ import inventory from '../controllers/inventory';
 
 const router = express.Router();
 
-// auth
-router.post('/signup', validator.auth, users.signup);
-router.post('/login', validator.auth, users.login);
-// users
-router.get('/users', users.seeUser);
+// auth/signup
+router.post('/auth/signup', validator.auth, users.signup);
+// auth/signin
+router.post('/auth/signin', validator.auth, users.login);
+
 // Create inventory
 router.post('/inventory', authenticator, validator.inventoryData, inventory.create);
 
