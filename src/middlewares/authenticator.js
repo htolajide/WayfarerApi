@@ -11,7 +11,7 @@ export default (req, res, next) => {
   } catch (error) {
     return res.jsend.error({
       message: 'authentication failed',
-      data: error
+      data: error,
     });
   }
 };

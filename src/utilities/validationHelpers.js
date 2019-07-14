@@ -7,5 +7,5 @@ export default {
   checkPatternedFields: (field, value, regex) => {
     if (!regex.test(value)) return [`${field} is invalid`];
     return [];
-  }
+  },
 };

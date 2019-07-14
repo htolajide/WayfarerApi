@@ -1,11 +1,8 @@
 import express from 'express';
-
 import validator from '../middlewares/validator';
 import authenticator from '../middlewares/authenticator';
 import users from '../controllers/users';
 import inventory from '../controllers/inventory';
-
-
 
 const router = express.Router();
 
@@ -13,16 +10,16 @@ const router = express.Router();
 router.post('/signup', validator.auth, users.signup);
 router.post('/login', validator.auth, users.login);
 // users
-router.get('/users',  users.seeUser);
+router.get('/users', users.seeUser);
 // Create inventory
-router.post('/inventory', authenticator, validator.inventory, inventory.create);
+router.post('/inventory', authenticator, validator.inventoryData, inventory.create);
 
 // Get all inventory
 router.get('/inventory', authenticator, inventory.findAll);
 
 // Get an inventory
 router.get(
-  '/inventory/:inventoryId', authenticator, validator.checkInventoryParams, inventory.findOne
+  '/inventory/:inventoryId', authenticator, validator.checkInventoryParams, inventory.findOne,
 );
 
 export default router;
