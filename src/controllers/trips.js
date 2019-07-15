@@ -39,4 +39,17 @@ export default {
     });
     return null;
   },
+  seeAllTrips: (req, res) => {
+    pool.query('SELECT * FROM trips ORDER BY id ASC', (error, results) => {
+      if (error) {
+        throw error;
+      }
+      return res.jsend.success(results.rows);
+    });
+    // disconnect client
+    pool.on('remove', () => {
+      debug('app:*')('Client Removed');
+      process.exit(0);
+    });
+  },
 };
