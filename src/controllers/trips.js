@@ -9,7 +9,7 @@ export default {
       if (error) {
         throw error;
       }
-      if (results.rows[0].is_admin === false) return res.jsend.error('You are not eligible to create trips');
+      if (results.rows[0].is_admin === false) return res.jsend.error('Only admin can create trips');
       return null;
     });
     // create trip if user is admin
@@ -38,5 +38,18 @@ export default {
       process.exit(0);
     });
     return null;
+  },
+  seeAllTrips: (req, res) => {
+    pool.query('SELECT * FROM trips ORDER BY id ASC', (error, results) => {
+      if (error) {
+        throw error;
+      }
+      res.jsend.success(results.rows);
+    });
+    // disconnect client
+    pool.on('remove', () => {
+      debug('app:*')('Client Removed');
+      process.exit(0);
+    });
   },
 };

@@ -13,11 +13,11 @@ router.post('/auth/signup', validator.auth, users.signup);
 // auth/signin
 router.post('/auth/signin', validator.auth, users.login);
 
-// Create inventory
+// Create trip
 router.post('/trip', authenticator, validator.tripData, trip.create);
 
-// Get all inventory
-router.get('/trip', authenticator, inventory.findAll);
+// Get all trip
+router.get('/trip', authenticator, trip.seeAllTrips);
 
 // Get an inventory
 router.get(
