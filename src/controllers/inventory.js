@@ -11,7 +11,7 @@ export default {
       category,
       name,
       description,
-      userId
+      userId,
     };
 
     // persist inventory to database
@@ -31,5 +31,5 @@ export default {
     if (inventory.userId !== userId) return res.jsend.error('You cannot access this inventory');
 
     return res.jsend.success(inventory);
-  }
+  },
 };

@@ -2,7 +2,7 @@ import jwt from 'jsonwebtoken';
 
 export default (req, res, next) => {
   const { token } = req.cookies;
-  if (!token) return res.jsend.error('Unauthenticated!');
+  if (!token) return res.jsend.error('You are not authorised');
 
   try {
     const user = jwt.decode(token, process.env.SECRET);
@@ -10,8 +10,8 @@ export default (req, res, next) => {
     return next();
   } catch (error) {
     return res.jsend.error({
-      message: 'authentication failed',
-      data: error
+      message: 'Your authentication failed',
+      data: error,
     });
   }
 };

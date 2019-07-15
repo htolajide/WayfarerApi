@@ -1,6 +1,7 @@
+
 const Users = {
   create: user => Users.list.push(user),
-  list: []
+  list: [],
 };
 
 export default Users;

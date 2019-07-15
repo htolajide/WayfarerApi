@@ -1,4 +1,6 @@
+// to setup eslint airbnb use npm i -D eslint eslint-config-airbnb-base eslint-plugin-import
 import '@babel/polyfill';
+import debug from 'debug';
 import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
 import dotenv from 'dotenv';
@@ -15,13 +17,16 @@ const app = express();
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(cookieParser());
-app.use(morgan('combined'));
+// use morgan to log at command line
+app.use(morgan('combined')); // 'combined' outputs the Apache style LOGs
 app.use(jsend.middleware);
 
 app.use('/api/v1', v1Router);
 
-app.get('*', (req, res) => res.jsend.success('Invana!!!'));
+app.get('*', (req, res) => res.jsend.success('WayFarerApi'));
 
 const port = parseInt(process.env.PORT, 10) || 4000;
 
-app.listen(port, () => console.log(`Live at ${port}`));
+app.listen(port, () => debug('app:*')(`Live at ${port}`));
+
+module.exports = app; // for testing
