@@ -1,5 +1,5 @@
 import validationHelpers from '../utilities/validationHelpers';
-import { emailRegex, passwordRegex, descriptionRegex } from '../utilities/regexen';
+import { emailRegex, passwordRegex } from '../utilities/regexen';
 
 const { checkForEmptyFields, checkPatternedFields } = validationHelpers;
 
@@ -26,12 +26,15 @@ export default {
     }
     return next();
   },
-  inventoryData: (req, res, next) => {
+  tripData: (req, res, next) => {
     const errors = [];
-    const { category, name, description } = req.body;
-    errors.push(...checkForEmptyFields('Category', category));
-    errors.push(...checkForEmptyFields('Name', name));
-    errors.push(...checkPatternedFields('Description', description, descriptionRegex));
+    const {
+      busId, origin, destination, fare,
+    } = req.body;
+    errors.push(...checkForEmptyFields('BusId', busId));
+    errors.push(...checkForEmptyFields('Origin', origin));
+    errors.push(...checkForEmptyFields('Destination', destination));
+    errors.push(...checkForEmptyFields('Fare', fare));
 
     if (errors.length) {
       return res.jsend.error({
@@ -41,7 +44,7 @@ export default {
     }
     return next();
   },
-  checkInventoryParams: (req, res, next) => {
+  checkTripParams: (req, res, next) => {
     const { params: { inventoryId } } = req;
     const parsedNumber = parseInt(inventoryId, 10);
     const isInteger = Number.isInteger(parsedNumber);

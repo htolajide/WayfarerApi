@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken';
 import debug from 'debug';
 import bcrypt from 'bcrypt';
-import pool from '../dbconnect';
+import pool from '../database/dbconnect';
 
 export default {
   signup: (req, res) => {
@@ -21,7 +21,6 @@ export default {
           // signin jwt and wrap in a cookie
           const token = jwt.sign({ userId: Result.rows[0].id }, process.env.SECRET);
           res.cookie('userid', Result.rows[0].id, { expires: new Date(Date.now() + 3600000), httpOnly: true });
-          res.cookie('isAdmin', isAdmin, { expires: new Date(Date.now() + 3600000), httpOnly: true });
           res.cookie('token', token, { expires: new Date(Date.now() + 3600000), httpOnly: true });
           return res.jsend.success({
             Email: email,
@@ -55,7 +54,6 @@ export default {
       // sign jwt and wrap in a cookie
       const token = jwt.sign({ userId: results.rows[0].id }, process.env.SECRET);
       res.cookie('userid', results.rows[0].id, { expires: new Date(Date.now() + 3600000), httpOnly: true });
-      res.cookie('isAdmin', isAdmin, { expires: new Date(Date.now() + 3600000), httpOnly: true });
       res.cookie('token', token, { expires: new Date(Date.now() + 3600000), httpOnly: true });
       return res.jsend.success({
         user_id: results.rows[0].id, isAdmin: results.rows[0].is_admin, Token: token,

@@ -12,6 +12,6 @@ const config = {
 };
 const pool = pg.Pool(config);
 pool.on('connect', () => {
-  debug('connected to the Database');
+  debug('app:database')('connected to the Database');
 });
 module.exports = pool;
