@@ -1,24 +1,20 @@
-"use strict";
 
-Object.defineProperty(exports, "__esModule", {
-  value: true
+
+Object.defineProperty(exports, '__esModule', {
+  value: true,
 });
-exports["default"] = void 0;
+exports.default = void 0;
 var Inventory = {
   create: function create(inventory) {
     return Inventory.list.push(inventory);
   },
   findAll: function findAll(userId) {
-    return Inventory.list.filter(function (inventory) {
-      return inventory.userId === userId;
-    });
+    return Inventory.list.filter(inventory => inventory.userId === userId);
   },
   findOne: function findOne(inventoryId) {
-    return Inventory.list.find(function (inventory) {
-      return inventory.id === inventoryId;
-    });
+    return Inventory.list.find(inventory => inventory.id === inventoryId);
   },
-  list: []
+  list: [],
 };
-var _default = Inventory;
-exports["default"] = _default;
+const _default = Inventory;
+exports.default = _default;

@@ -1,34 +1,34 @@
-"use strict";
 
-Object.defineProperty(exports, "__esModule", {
-  value: true
+
+Object.defineProperty(exports, '__esModule', {
+  value: true,
 });
-exports["default"] = void 0;
+exports.default = void 0;
 
-var _validationHelpers = _interopRequireDefault(require("../utilities/validationHelpers"));
+const _validationHelpers = _interopRequireDefault(require('../utilities/validationHelpers'));
 
-var _regexen = require("../utilities/regexen");
+const _regexen = require('../utilities/regexen');
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
 
-function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance"); }
+function _nonIterableSpread() { throw new TypeError('Invalid attempt to spread non-iterable instance'); }
 
-function _iterableToArray(iter) { if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter); }
+function _iterableToArray(iter) { if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === '[object Arguments]') return Array.from(iter); }
 
 function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } }
 
-var checkForEmptyFields = _validationHelpers["default"].checkForEmptyFields,
-    checkPatternedFields = _validationHelpers["default"].checkPatternedFields;
-var _default = {
+const { checkForEmptyFields } = _validationHelpers.default;
+const { checkPatternedFields } = _validationHelpers.default;
+const _default = {
   auth: function auth(req, res, next) {
-    var errors = [];
-    var _req$body = req.body,
-        firstname = _req$body.firstname,
-        lastname = _req$body.lastname,
-        email = _req$body.email,
-        password = _req$body.password;
+    const errors = [];
+    const _req$body = req.body;
+    const { firstname } = _req$body;
+    const { lastname } = _req$body;
+    const { email } = _req$body;
+    const { password } = _req$body;
 
     if (req.path.includes('signup')) {
       errors.push.apply(errors, _toConsumableArray(checkForEmptyFields('First name', firstname)));
@@ -41,18 +41,18 @@ var _default = {
     if (errors.length) {
       return res.jsend.error({
         message: 'Your request contain errors',
-        data: errors
+        data: errors,
       });
     }
 
     return next();
   },
   inventory: function inventory(req, res, next) {
-    var errors = [];
-    var _req$body2 = req.body,
-        category = _req$body2.category,
-        name = _req$body2.name,
-        description = _req$body2.description;
+    const errors = [];
+    const _req$body2 = req.body;
+    const { category } = _req$body2;
+    const { name } = _req$body2;
+    const { description } = _req$body2;
     errors.push.apply(errors, _toConsumableArray(checkForEmptyFields('Category', category)));
     errors.push.apply(errors, _toConsumableArray(checkForEmptyFields('Name', name)));
     errors.push.apply(errors, _toConsumableArray(checkPatternedFields('Description', description, _regexen.descriptionRegex)));
@@ -60,19 +60,19 @@ var _default = {
     if (errors.length) {
       return res.jsend.error({
         message: 'Your request contain errors',
-        data: errors
+        data: errors,
       });
     }
 
     return next();
   },
   checkInventoryParams: function checkInventoryParams(req, res, next) {
-    var inventoryId = req.params.inventoryId;
-    var parsedNumber = parseInt(inventoryId, 10);
-    var isInteger = Number.isInteger(parsedNumber);
-    var isGreaterThanZero = parsedNumber > 0;
+    const { inventoryId } = req.params;
+    const parsedNumber = parseInt(inventoryId, 10);
+    const isInteger = Number.isInteger(parsedNumber);
+    const isGreaterThanZero = parsedNumber > 0;
     if (isInteger && isGreaterThanZero) return next();
     return res.jsend.error('Inventory ID must be an integer greater than zero');
-  }
+  },
 };
-exports["default"] = _default;
+exports.default = _default;

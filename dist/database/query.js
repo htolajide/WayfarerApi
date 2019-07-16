@@ -1,61 +1,61 @@
-"use strict";
 
-var _pg = _interopRequireDefault(require("pg"));
 
-require("make-runnable");
+const _pg = _interopRequireDefault(require('pg'));
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+require('make-runnable');
 
-//get node postgres connector
-var config = require('../config').development;
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var pool = new _pg["default"].Pool(config);
-pool.on('connect', function () {
+// get node postgres connector
+const config = require('../config').development;
+
+const pool = new _pg.default.Pool(config);
+pool.on('connect', () => {
   console.log('connected to the Database');
 });
 
-var createTables = function createTables() {
-  var user = "CREATE TABLE IF NOT EXISTS \n     user( \n        id SERIAL PRIMARY KEY, \n        email VARCHAR NOT NULL,\n        first_name VARCHAR NOT NULL,\n        last_name VARCHAR NOT NULL,\n        password VARCHAR NOT NULL,\n        is_admin BOOLEAN FALSE\n        )";
-  pool.query(user).then(function (res) {
+const createTables = function createTables() {
+  const user = 'CREATE TABLE IF NOT EXISTS \n     user( \n        id SERIAL PRIMARY KEY, \n        email VARCHAR NOT NULL,\n        first_name VARCHAR NOT NULL,\n        last_name VARCHAR NOT NULL,\n        password VARCHAR NOT NULL,\n        is_admin BOOLEAN FALSE\n        )';
+  pool.query(user).then((res) => {
     console.log(res);
     pool.end();
-  })["catch"](function (err) {
+  }).catch((err) => {
     console.log(err);
     pool.end();
   });
-  var bus = "CREATE TABLE IF NOT EXISTS\n      bus(\n        id SERIAL PRIMARY KEY,\n        number_plate VARCHAR NOT NULL,\n        manufacturer VARCHAR NOT NULL,\n        model VARCHAR NOT NULL,\n        year VARCHAR NOT NULL,\n        capacity INT NOT NULL\n      )";
-  pool.query(bus).then(function (res) {
+  const bus = 'CREATE TABLE IF NOT EXISTS\n      bus(\n        id SERIAL PRIMARY KEY,\n        number_plate VARCHAR NOT NULL,\n        manufacturer VARCHAR NOT NULL,\n        model VARCHAR NOT NULL,\n        year VARCHAR NOT NULL,\n        capacity INT NOT NULL\n      )';
+  pool.query(bus).then((res) => {
     console.log(res);
     pool.end();
-  })["catch"](function (err) {
+  }).catch((err) => {
     console.log(err);
     pool.end();
   });
-  var trip = "CREATE TABLE IF NOT EXISTS\n      trip(\n        id SERIAL PRIMARY KEY,\n        bus_id INT NOT NULL,\n        origin VARCHAR NOT NULL,\n        destination VARCHAR NOT NULL,\n        trip_date DATETIME NOW,\n        fare FOAT NOT NULL,\n        status INT NOT NULL\n      )";
-  pool.query(trip).then(function (res) {
+  const trip = 'CREATE TABLE IF NOT EXISTS\n      trip(\n        id SERIAL PRIMARY KEY,\n        bus_id INT NOT NULL,\n        origin VARCHAR NOT NULL,\n        destination VARCHAR NOT NULL,\n        trip_date DATETIME NOW,\n        fare FOAT NOT NULL,\n        status INT NOT NULL\n      )';
+  pool.query(trip).then((res) => {
     console.log(res);
     pool.end();
-  })["catch"](function (err) {
+  }).catch((err) => {
     console.log(err);
     pool.end();
   });
-  var booking = "CREATE TABLE IF NOT EXISTS\n      booking(\n        id SERIAL PRIMARY KEY,\n        trip_id INT NOT NULL,\n        user_id INT NOT NULL,\n        created_on DATETIME NOW\n      )";
-  pool.query(booking).then(function (res) {
+  const booking = 'CREATE TABLE IF NOT EXISTS\n      booking(\n        id SERIAL PRIMARY KEY,\n        trip_id INT NOT NULL,\n        user_id INT NOT NULL,\n        created_on DATETIME NOW\n      )';
+  pool.query(booking).then((res) => {
     console.log(res);
     pool.end();
-  })["catch"](function (err) {
+  }).catch((err) => {
     console.log(err);
     pool.end();
   });
 };
 
-pool.on('remove', function () {
+pool.on('remove', () => {
   console.log('client removed');
   process.exit(0);
 });
 
-var getUsers = function getUsers(request, response) {
-  pool.query('SELECT * FROM users ORDER BY id ASC', function (error, results) {
+const getUsers = function getUsers(request, response) {
+  pool.query('SELECT * FROM users ORDER BY id ASC', (error, results) => {
     if (error) {
       throw error;
     }
@@ -64,9 +64,9 @@ var getUsers = function getUsers(request, response) {
   });
 };
 
-var getUserById = function getUserById(request, response) {
-  var id = parseInt(request.params.id);
-  pool.query('SELECT * FROM users WHERE id = $1', [id], function (error, results) {
+const getUserById = function getUserById(request, response) {
+  const id = parseInt(request.params.id);
+  pool.query('SELECT * FROM users WHERE id = $1', [id], (error, results) => {
     if (error) {
       throw error;
     }
@@ -75,51 +75,51 @@ var getUserById = function getUserById(request, response) {
   });
 };
 
-var createUser = function createUser(request, response) {
-  var _request$body = request.body,
-      name = _request$body.name,
-      email = _request$body.email;
-  pool.query('INSERT INTO users (name, email) VALUES ($1, $2)', [name, email], function (error, results) {
+const createUser = function createUser(request, response) {
+  const _request$body = request.body;
+  const { name } = _request$body;
+  const { email } = _request$body;
+  pool.query('INSERT INTO users (name, email) VALUES ($1, $2)', [name, email], (error, results) => {
     if (error) {
       throw error;
     }
 
-    response.status(201).send("User added with ID: ".concat(result.insertId));
+    response.status(201).send('User added with ID: '.concat(result.insertId));
   });
 };
 
-var updateUser = function updateUser(request, response) {
-  var id = parseInt(request.params.id);
-  var _request$body2 = request.body,
-      name = _request$body2.name,
-      email = _request$body2.email;
-  pool.query('UPDATE users SET name = $1, email = $2 WHERE id = $3', [name, email, id], function (error, results) {
+const updateUser = function updateUser(request, response) {
+  const id = parseInt(request.params.id);
+  const _request$body2 = request.body;
+  const { name } = _request$body2;
+  const { email } = _request$body2;
+  pool.query('UPDATE users SET name = $1, email = $2 WHERE id = $3', [name, email, id], (error, results) => {
     if (error) {
       throw error;
     }
 
-    response.status(200).send("User modified with ID: ".concat(id));
+    response.status(200).send('User modified with ID: '.concat(id));
   });
 };
 
-var deleteUser = function deleteUser(request, response) {
-  var id = parseInt(request.params.id);
-  pool.query('DELETE FROM users WHERE id = $1', [id], function (error, results) {
+const deleteUser = function deleteUser(request, response) {
+  const id = parseInt(request.params.id);
+  pool.query('DELETE FROM users WHERE id = $1', [id], (error, results) => {
     if (error) {
       throw error;
     }
 
-    response.status(200).send("User deleted with ID: ".concat(id));
+    response.status(200).send('User deleted with ID: '.concat(id));
   });
-}; //export utilities to be accessible  from any where within the application
+}; // export utilities to be accessible  from any where within the application
 
 
 module.exports = {
-  getUsers: getUsers,
-  getUserById: getUserById,
-  createUser: createUser,
-  updateUser: updateUser,
-  deleteUser: deleteUser,
-  createTables: createTables,
-  Pool: Pool
+  getUsers,
+  getUserById,
+  createUser,
+  updateUser,
+  deleteUser,
+  createTables,
+  Pool,
 };

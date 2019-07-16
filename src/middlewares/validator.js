@@ -26,6 +26,25 @@ export default {
     }
     return next();
   },
+  tripCancelData: (req, res, next) => {
+    const { status } = req.body;
+    const error = checkForEmptyFields('Status', status);
+    if (error) {
+      return res.jsend.error({
+        message: 'Your request contain errors',
+        data: error,
+      });
+    }
+    return next();
+  },
+  checkTripParams: (req, res, next) => {
+    const { params: { tripId } } = req;
+    const parsedNumber = parseInt(tripId, 10);
+    const isInteger = Number.isInteger(parsedNumber);
+    const isGreaterThanZero = parsedNumber > 0;
+    if (isInteger && isGreaterThanZero) return next();
+    return res.jsend.error('Trip ID parameter must be an integer greater than zero');
+  },
   tripData: (req, res, next) => {
     const errors = [];
     const {
@@ -43,13 +62,5 @@ export default {
       });
     }
     return next();
-  },
-  checkTripParams: (req, res, next) => {
-    const { params: { inventoryId } } = req;
-    const parsedNumber = parseInt(inventoryId, 10);
-    const isInteger = Number.isInteger(parsedNumber);
-    const isGreaterThanZero = parsedNumber > 0;
-    if (isInteger && isGreaterThanZero) return next();
-    return res.jsend.error('Inventory ID must be an integer greater than zero');
   },
 };

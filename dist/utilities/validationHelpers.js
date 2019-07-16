@@ -1,17 +1,17 @@
-"use strict";
 
-Object.defineProperty(exports, "__esModule", {
-  value: true
+
+Object.defineProperty(exports, '__esModule', {
+  value: true,
 });
-exports["default"] = void 0;
-var _default = {
+exports.default = void 0;
+const _default = {
   checkForEmptyFields: function checkForEmptyFields(field, value) {
-    if (!value || !value.trim()) return ["".concat(field, " is required")];
+    if (!value || !value.trim()) return [''.concat(field, ' is required')];
     return [];
   },
   checkPatternedFields: function checkPatternedFields(field, value, regex) {
-    if (!regex.test(value)) return ["".concat(field, " is invalid")];
+    if (!regex.test(value)) return [''.concat(field, ' is invalid')];
     return [];
-  }
+  },
 };
-exports["default"] = _default;
+exports.default = _default;

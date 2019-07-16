@@ -1,29 +1,29 @@
-"use strict";
 
-Object.defineProperty(exports, "__esModule", {
-  value: true
+
+Object.defineProperty(exports, '__esModule', {
+  value: true,
 });
-exports["default"] = void 0;
+exports.default = void 0;
 
-var _jsonwebtoken = _interopRequireDefault(require("jsonwebtoken"));
+const _jsonwebtoken = _interopRequireDefault(require('jsonwebtoken'));
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var _default = function _default(req, res, next) {
-  var token = req.cookies.token;
+const _default = function _default(req, res, next) {
+  const { token } = req.cookies;
   if (!token) return res.jsend.error('Unauthenticated!');
 
   try {
-    var user = _jsonwebtoken["default"].decode(token, process.env.SECRET);
+    const user = _jsonwebtoken.default.decode(token, process.env.SECRET);
 
     req.user = user;
     return next();
   } catch (error) {
     return res.jsend.error({
       message: 'authentication failed',
-      data: error
+      data: error,
     });
   }
 };
 
-exports["default"] = _default;
+exports.default = _default;
