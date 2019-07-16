@@ -25,4 +25,10 @@ router.patch('/trips/:tripId', authenticator, validator.checkTripParams, trip.ca
 // Create booking
 router.post('/bookings', authenticator, validator.bookData, booking.create);
 
+// Get all bookings
+router.get('/bookings', authenticator, booking.getBookings);
+
+// Delete a bookings
+router.delete('/bookings/:bookingId', authenticator, validator.checkTripParams, trip.cancelTrip);
+
 export default router;
