@@ -3,6 +3,7 @@ import validator from '../middlewares/validator';
 import authenticator from '../middlewares/authenticator';
 import users from '../controllers/users';
 import trip from '../controllers/trips';
+import booking from '../controllers/bookings';
 
 
 const router = express.Router();
@@ -20,5 +21,8 @@ router.get('/trips', authenticator, trip.seeAllTrips);
 
 // Cancel a trip
 router.patch('/trips/:tripId', authenticator, validator.checkTripParams, trip.cancelTrip);
+
+// Create booking
+router.post('/bookings', authenticator, validator.bookData, booking.create);
 
 export default router;

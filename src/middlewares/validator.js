@@ -70,4 +70,17 @@ export default {
     }
     return next();
   },
+  bookData: (req, res, next) => {
+    const { tripId, sitNumber } = req.body;
+    const errors = [];
+    errors.push(...checkForEmptyFields('Trip Id', tripId));
+    errors.push(...checkForEmptyFields('Sit Number', sitNumber));
+    if (errors.length) {
+      return res.jsend.error({
+        message: 'Your request contain errors',
+        data: errors,
+      });
+    }
+    return next();
+  },
 };
