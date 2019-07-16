@@ -8,8 +8,8 @@
     "clean": "rm -rf dist && mkdir dist",
     "heroku-postbuild": "npm run clean && npm run build",
     "start": "SET NODE_ENV=dev && node dist/app.js",
-    "start:dev": "SET NODE_ENV=dev && nodemon --exec babel-node src/app.js",
-    "create-tables": "node ./src/database/queryUser createTable",
+    "start:dev": "nodemon --exec babel-node src/app.js",
+    "create-tables": "node ./src/models/tables tables",
     "test": "mocha --timeout 10000"
   },
   "author": "Hammed Taofeek",

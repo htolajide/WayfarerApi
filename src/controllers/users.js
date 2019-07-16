@@ -4,39 +4,34 @@ import bcrypt from 'bcrypt';
 import pool from '../database/dbconnect';
 
 export default {
-  signup: (req, res) => {
+  signup: async (req, res) => {
     // check for existence
     const {
       email, firstName, lastName, password, isAdmin,
     } = req.body;
-    pool.query('SELECT email FROM users WHERE email = $1', [email], async (error, results, next) => {
-      if (error) {
-        throw error;
-      }
-      if (results.rows[0] === undefined) {
-        pool.query('INSERT INTO users (email, first_name, last_name, password, is_admin) VALUES ($1, $2, $3, $4, $5) RETURNING id', [email, firstName, lastName, await bcrypt.hash(password, 10), isAdmin], (Error, Result) => {
-          if (Error) {
-            throw Error;
-          }
-          // signin jwt and wrap in a cookie
-          const token = jwt.sign({ userId: Result.rows[0].id }, process.env.SECRET);
-          res.cookie('userid', Result.rows[0].id, { expires: new Date(Date.now() + 3600000), httpOnly: true });
-          res.cookie('token', token, { expires: new Date(Date.now() + 3600000), httpOnly: true });
-          return res.jsend.success({
-            Email: email,
-            Password: password,
-            first_name: firstName,
-            last_name: lastName,
-            is_admin: isAdmin,
+    try {
+      pool.query('SELECT email FROM users WHERE email = $1', [email], async (error, results) => {
+        // user does not exist
+        if (results.rows[0] === undefined) {
+          pool.query('INSERT INTO users (email, first_name, last_name, password, is_admin) VALUES ($1, $2, $3, $4, $5) RETURNING id, is_admin', [email, firstName, lastName, await bcrypt.hash(password, 10), isAdmin], (err, result) => {
+            // signin jwt and wrap in a cookie
+            const token = jwt.sign({ userId: result.rows[0].id }, process.env.SECRET);
+            res.cookie('userid', result.rows[0].id, { expires: new Date(Date.now() + 3600000), httpOnly: true });
+            res.cookie('token', token, { expires: new Date(Date.now() + 3600000), httpOnly: true });
+            return res.jsend.success({
+              user_id: result.rows[0].id,
+              is_admin: result.rows[0].is_admin,
+              Token: token,
+            });
           });
-        });
-      } if (results.rows[0].email === email) return res.jsend.error('Email address already exists.');
-      return next();
-    });
+        }
+        if (results.rows[0] !== undefined) return res.jsend.error('Email already exists'); // email exists
+        return null;
+      });
+    } catch (error) { debug('app:*')(error); }
     // disconnect client after operation
     pool.on('remove', () => {
-      debug('app:login')('client removed');
-      process.exit(0);
+      debug('app:login')('client removed @signup');
     });
   },
   // user login logic
@@ -61,7 +56,7 @@ export default {
     });
     // disconnect client after operation
     pool.on('remove', () => {
-      debug('app:login')('client removed');
+      debug('app:login')('client removed @signin');
       process.exit(0);
     });
   },
