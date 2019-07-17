@@ -1,8 +1,5 @@
 import debug from 'debug';
 import pool from '../database/dbconnect';
-// import tables from '../models/tables';
-
-// tables.createBookingTable();
 
 export default {
   create: (req, res) => {
@@ -42,29 +39,47 @@ export default {
   getBookings: (req, res) => {
     // get userid from cookies
     const { userid } = req.cookies;
-    pool.query('SELECT is_admin FROM users WHERE id = $1', [userid], (error, results) => {
-      if (!error) {
-        // user is not admin allow to see only his bookings
-        if (results.rows[0].is_admin === false) {
-          pool.query(`SELECT bookings.id, bookings.user_id, trip_id bus_id, trip_date, bookings.sit_number, first_name, last_name, email, origin, destination, fare FROM trips INNER JOIN bookings on trips.id = bookings.trip_id 
-            INNER JOIN users ON bookings.user_id = users.id WHERE bookings.user_id = $1`, [userid], (err, result) => {
-            if (!err) {
-              return res.jsend.success(result.rows);
-            }
-            return res.jsend.error('error user');
-          });
-        } else if (results.rows[0].is_admin === true) {
-          pool.query(`SELECT bookings.id, bookings.user_id, trip_id bus_id, trip_date, bookings.sit_number, first_name, last_name, email, origin, destination, fare FROM trips INNER JOIN bookings on trips.id = bookings.trip_id 
-          INNER JOIN users ON bookings.user_id = users.id  ORDER BY bookings.user_id ASC`, (err, result) => {
-            debug('app:*')('am inside retuning query');
-            if (!err) {
-              debug('app:*')('am inside retuning code');
-              return res.jsend.success(result.rows);
-            }
-            return res.jsend.error('error admin');
-          });
+    try {
+      pool.query('SELECT is_admin FROM users WHERE id = $1', [userid], (error, results) => {
+        if (!error) {
+          // user is not admin allow to see only his bookings
+          if (results.rows[0].is_admin === false) {
+            pool.query(`SELECT bookings.id as booking_id, bookings.user_id, trip_id bus_id, trip_date, bookings.sit_number, first_name, last_name, email, origin, destination, fare FROM bookings INNER JOIN users on bookings.user_id = users.id 
+              INNER JOIN trips ON bookings.trip_id = trips.id WHERE bookings.user_id = $1 ORDER BY bookings.id ASC`, [userid], (err, result) => {
+              if (!err) {
+                return res.jsend.success(result.rows);
+              }
+              return res.jsend.error('error user');
+            });
+          } else if (results.rows[0].is_admin === true) {
+            pool.query(`SELECT bookings.id, bookings.user_id, trip_id bus_id, trip_date, bookings.sit_number, first_name, last_name, email, origin, destination, fare FROM trips INNER JOIN bookings on trips.id = bookings.trip_id 
+              INNER JOIN users ON bookings.user_id = users.id  ORDER BY bookings.user_id ASC`, (err, result) => {
+              if (!err) {
+                return res.jsend.success(result.rows);
+              }
+              return res.jsend.error('error admin');
+            });
+          }
         }
-      }
+      });
+    } catch (error) { debug('app:*')(error); }
+    // disconnect client
+    pool.on('remove', () => {
+      debug('app:*')('Client removed @getBookings');
+    });
+  },
+  deleteBooking: (req, res) => {
+    const id = parseInt(req.params.bookingId, 10);
+    try {
+      pool.query('DELETE FROM bookings WHERE id = $1', [id], (error, result) => {
+        if (result) {
+          res.jsend.success({ message: 'Booking deleted successfully' });
+        }
+      });
+    } catch (error) { debug('app:*')(error); }
+    // disconnect client
+    pool.on('remove', () => {
+      debug('app:*')('Client removed @deleteBooking');
     });
   },
 };

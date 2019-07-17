@@ -57,7 +57,6 @@ export default {
     // disconnect client after operation
     pool.on('remove', () => {
       debug('app:login')('client removed @signin');
-      process.exit(0);
     });
   },
 };

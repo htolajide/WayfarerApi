@@ -83,4 +83,12 @@ export default {
     }
     return next();
   },
+  checkBookingParams: (req, res, next) => {
+    const { params: { bookingId } } = req;
+    const parsedNumber = parseInt(bookingId, 10);
+    const isInteger = Number.isInteger(parsedNumber);
+    const isGreaterThanZero = parsedNumber > 0;
+    if (isInteger && isGreaterThanZero) return next();
+    return res.jsend.error('Booking ID parameter must be an integer greater than zero');
+  },
 };

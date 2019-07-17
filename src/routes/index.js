@@ -29,6 +29,6 @@ router.post('/bookings', authenticator, validator.bookData, booking.create);
 router.get('/bookings', authenticator, booking.getBookings);
 
 // Delete a bookings
-router.delete('/bookings/:bookingId', authenticator, validator.checkTripParams, trip.cancelTrip);
+router.delete('/bookings/:bookingId', authenticator, validator.checkBookingParams, booking.deleteBooking);
 
 export default router;

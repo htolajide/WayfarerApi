@@ -7,6 +7,7 @@ import dotenv from 'dotenv';
 import express from 'express';
 import jsend from 'jsend';
 import morgan from 'morgan';
+import database from './models/tables';
 
 import v1Router from './routes';
 
@@ -20,6 +21,11 @@ app.use(cookieParser());
 // use morgan to log at command line
 app.use(morgan('combined')); // 'combined' outputs the Apache style LOGs
 app.use(jsend.middleware);
+database.createUserTable();
+database.createBookingTable();
+database.createTripTable();
+database.createBusTable();
+database.disconnect();
 
 app.use('/api/v1', v1Router);
 

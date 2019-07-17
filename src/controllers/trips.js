@@ -54,8 +54,7 @@ export default {
     });
   },
   cancelTrip: (req, res) => {
-    const { params: { tripId } } = req;
-    const id = parseInt(tripId, 10);
+    const id = parseInt(req.params.tripId, 10);
     const { status } = req.body;
     const { userid } = req.cookies;
     try {

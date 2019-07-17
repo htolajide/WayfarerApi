@@ -3,8 +3,8 @@ import debug from 'debug';
 // get postgres connection pool for database query
 import pool from '../database/dbconnect';
 
-const tables = {
-  // create user table if not exist
+const database = {
+  // create user tables if not exist
   createUserTable: () => {
     const user = `CREATE TABLE IF NOT EXISTS
        users( 
@@ -17,17 +17,11 @@ const tables = {
           )`;
     pool.query(user)
       .then((res) => {
-        debug('app:*')(res);
-        pool.end();
+        debug('app:*')(`table users is available ${res}`);
       })
       .catch((err) => {
         debug('app:*')(err);
-        pool.end();
       });
-    // disconnect client
-    pool.on('remove', () => {
-      debug('app:*')('Client removed for usertable');
-    });
   },
   createBusTable: () => {
     const bus = `CREATE TABLE IF NOT EXISTS
@@ -41,15 +35,11 @@ const tables = {
       )`;
     pool.query(bus)
       .then((res) => {
-        debug('app:*')(res);
+        debug('app:*')(`table bus is available ${res}`);
       })
       .catch((err) => {
         debug('app:*')(err);
       });
-    // disconnect client
-    pool.on('remove', () => {
-      debug('app:*')('Client removed for bus table');
-    });
   },
   createTripTable: () => {
     const trip = `CREATE TABLE IF NOT EXISTS
@@ -64,15 +54,11 @@ const tables = {
       )`;
     pool.query(trip)
       .then((res) => {
-        debug('app:*')(res);
+        debug('app:*')(`table trips is available ${res}`);
       })
       .catch((err) => {
         debug('app:*')(err);
       });
-    // disconnect client
-    pool.on('remove', () => {
-      debug('app:*')('Client removed for trip table');
-    });
   },
   createBookingTable: () => {
     const booking = `CREATE TABLE IF NOT EXISTS
@@ -85,17 +71,18 @@ const tables = {
       )`;
     pool.query(booking)
       .then((res) => {
-        debug('app:*')(res);
+        debug('app:*')(`table bookings is available ${res}`);
       })
       .catch((err) => {
         debug('app:*')(err);
       });
+  },
+  disconnect: () => {
     // disconnect client
     pool.on('remove', () => {
-      debug('app:*')('Client removed for booking table');
+      debug('app:database')('Tables created successfully, conection removed');
     });
   },
 };
 // export utilities to be accessible  from any where within the application
-export default tables;
-// require('make-runnable');
+export default database;
