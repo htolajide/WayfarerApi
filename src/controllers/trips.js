@@ -1,14 +1,10 @@
 import debug from 'debug';
 import pool from '../database/dbconnect';
-// import tables from '../models/tables';
-
-// tables.createTripTable();
 
 export default {
   create: (req, res) => {
     // check if user is admin
     const { token, userid } = req.cookies;
-    // create trip if user is admin
     const {
       busId, origin, destination, fare,
     } = req.body;
@@ -17,6 +13,7 @@ export default {
         if (!error) {
           if (results.rows[0].is_admin === false) return res.jsend.error('Only admin can can create trips');
         }
+        // create trip if user is admin
         pool.query('INSERT INTO trips (bus_id, origin, destination, fare) VALUES ($1, $2, $3, $4) RETURNING id, status', [busId, origin, destination, fare], (err, result) => {
           if (!err) {
             return res.jsend.success({
@@ -58,6 +55,7 @@ export default {
     const { status } = req.body;
     const { userid } = req.cookies;
     try {
+      // Check if user is admin
       pool.query('SELECT is_admin FROM users WHERE id = $1', [userid], (error, results) => {
         if (!error) {
           if (results.rows[0].is_admin === false) return res.jsend.error('Only admin can cancel trip');

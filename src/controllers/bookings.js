@@ -5,7 +5,7 @@ export default {
   create: (req, res) => {
     // get userid from cookies
     const { userid } = req.cookies;
-    // get is admin from user
+    // get tripaId and sitNumbder
     const { tripId, sitNumber } = req.body;
     try {
       pool.query('INSERT INTO bookings (trip_id, user_id, sit_number) VALUES ($1, $2, $3) RETURNING id', [tripId, userid, sitNumber], (error, results) => {

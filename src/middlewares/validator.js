@@ -7,7 +7,7 @@ export default {
   auth: (req, res, next) => {
     const errors = [];
     const {
-      email, firstName, lastName, password, isAdmin,
+      email, firstName, lastName, password,
     } = req.body;
 
     if (req.path.includes('signup')) {
@@ -15,7 +15,6 @@ export default {
       errors.push(...checkForEmptyFields('Last name', lastName));
       errors.push(...checkForEmptyFields('Password', password));
       errors.push(...checkForEmptyFields('Email', email));
-      errors.push(...checkForEmptyFields('Are you Admin true/false', isAdmin));
       errors.push(...checkPatternedFields('Password', password, passwordRegex));
       errors.push(...checkPatternedFields('Email address', email, emailRegex));
     } else if (req.path.includes('signin')) {
@@ -23,7 +22,6 @@ export default {
       errors.push(...checkForEmptyFields('Password', password));
       errors.push(...checkForEmptyFields('Email', email));
       errors.push(...checkPatternedFields('Password', password, passwordRegex));
-      errors.push(...checkForEmptyFields('Are you Admin true/false', isAdmin));
     }
     if (errors.length) {
       return res.jsend.error({
